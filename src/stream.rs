@@ -6,7 +6,7 @@
 //! There is also a convenience function `play` for using that output mixer to
 //! play a single sound.
 use crate::common::{assert_error_traits, ChannelCount, SampleRate};
-use crate::math::nz;
+use crate::math::{nearest_multiple_of_two, nz};
 use crate::mixer::{mixer, Mixer};
 use crate::player::Player;
 use crate::{decoder, Source};
@@ -191,9 +191,9 @@ impl DeviceSinkBuilder {
             .with_device(device)
             .with_supported_config(&default_config);
 
-        // minimum 40ms of audio
+        // aim for 50ms of audio
         let sample_rate = device.config.sample_rate().get();
-        let safe_buffer_size = (sample_rate / (1000 / 40)).next_power_of_two();
+        let safe_buffer_size = nearest_multiple_of_two(sample_rate / (1000 / 50));
 
         // This is suboptimal, the builder might still change the sample rate or
         // channel count which would throw the buffer size off. We have fixed
