@@ -5,6 +5,19 @@
 //!
 //! There is also a convenience function `play` for using that output mixer to
 //! play a single sound.
+//!
+//! # Buffer size
+//! Rodio configures a default buffer size of 100ms latency regardless of the
+//! system default. This is to get a good _"out of the box experience"_ on all
+//! systems as we found out that the system default is sometimes set completely
+//! wrong. That would lead to audio playback breaking apparently randomly on
+//! some systems.
+//!
+//! You can manually specify the buffer size if you want lower latency. For more
+//! info see [buffer_size](DeviceSinkBuilder::with_buffer_size).
+//!
+//! If you find a good way to reliably get a good buffer size on all platforms
+//! please contribute your solution to us!
 use crate::common::{assert_error_traits, ChannelCount, SampleRate};
 use crate::math::{nearest_multiple_of_two, nz};
 use crate::mixer::{mixer, Mixer};
